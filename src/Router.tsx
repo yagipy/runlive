@@ -2,6 +2,7 @@ import Editor from "@monaco-editor/react";
 import React from "react";
 import {Header} from "@/Header";
 import {Flex} from "@chakra-ui/react";
+
 const code = 'export const a = "test";'
 
 export const Router = () => {
