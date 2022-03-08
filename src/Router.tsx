@@ -55,7 +55,7 @@ sys.stderr = io.StringIO()`)
                 <Editor
                     onChange={handleChange}
                     height="65vh"
-                    defaultLanguage="python"
+                    defaultLanguage="javascript"
                     defaultValue={code}
                     theme="vs-dark"
                     options={{

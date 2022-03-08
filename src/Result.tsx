@@ -8,7 +8,7 @@ interface Props {
 export const Result = ({result}: Props) => {
     return (
         <Box w='100%' bg="black" paddingX={8} paddingY={25} color="white" h="25%" overflow="auto">
-            <code>
+            <code style={{whiteSpace: "pre-wrap"}}>
                 {result}
             </code>
         </Box>
