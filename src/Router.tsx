@@ -1,7 +1,7 @@
 import Editor from "@monaco-editor/react";
 import React, {useEffect, useRef, useState} from "react";
 import {Header} from "@/Header";
-import {Flex} from "@chakra-ui/react";
+import {Box, Container, Flex} from "@chakra-ui/react";
 import * as Y from "yjs";
 import {WebrtcProvider} from "y-webrtc";
 import {Result} from "@/Result";
@@ -49,12 +49,12 @@ sys.stderr = io.StringIO()`)
     }
 
     return (
-        <div>
+        <Box h="100vh">
             <Header handleRun={handleRun}/>
             <Flex as="main">
                 <Editor
                     onChange={handleChange}
-                    height="60vh"
+                    height="65vh"
                     defaultLanguage="python"
                     defaultValue={code}
                     theme="vs-dark"
@@ -68,6 +68,6 @@ sys.stderr = io.StringIO()`)
                 />
             </Flex>
             <Result result={result}/>
-        </div>
+        </Box>
     )
 }

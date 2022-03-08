@@ -1,4 +1,5 @@
 import React from "react"
+import {Box} from "@chakra-ui/react";
 
 interface Props {
     result: any
@@ -6,6 +7,10 @@ interface Props {
 
 export const Result = ({result}: Props) => {
     return (
-        <div style={{ bottom: 0, height: 100}}>{result}</div>
+        <Box w='100%' bg="black" paddingX={8} paddingY={25} color="white" h="25%" overflow="auto">
+            <code>
+                {result}
+            </code>
+        </Box>
     )
 }
