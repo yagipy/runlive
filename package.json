@@ -1,0 +1,28 @@
+{
+  "name": "runlive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yagipy/runlive.git"
+  },
+  "author": "Hiroyuki Yagihashi <yo@yagipy.me> (https://blog.yagipy.me)",
+  "bugs": {
+    "url": "https://github.com/yagipy/runlive/issues"
+  },
+  "homepage": "https://github.com/yagipy/runlive#readme",
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/node": "^17.0.21",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.13",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.6.2",
+    "vite": "^2.8.6"
+  }
+}

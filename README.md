@@ -1,2 +1,4 @@
 # runlive
-
+```shell
+yarn vite
+```
