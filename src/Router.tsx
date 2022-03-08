@@ -5,7 +5,7 @@ import {Flex} from "@chakra-ui/react";
 import * as Y from "yjs";
 import {WebrtcProvider} from "y-webrtc";
 import {Result} from "@/Result";
-import {useDynamicImportBy} from "@/hooks/useDynamicImportBy";
+import {usePyodide} from "@/hooks/usePyodide";
 
 const code = 'export const a = "test";'
 
@@ -16,6 +16,7 @@ export const Router = () => {
         sharedString.current.toString() ?? ""
     );
     const [result, setResult] = useState("")
+    const pyodide = usePyodide()
 
     useEffect(() => {
         new WebrtcProvider("room", doc.current);
@@ -36,11 +37,6 @@ export const Router = () => {
     };
 
     const handleRun = async () => {
-        // @ts-ignore
-        const pyodidePkg = await import("pyodide/pyodide.js");
-        const pyodide = await pyodidePkg.loadPyodide({
-            indexURL: "https://cdn.jsdelivr.net/pyodide/v0.19.1/full/",
-        });
         // https://github.com/subwaymatch/gold-is/blob/20ea2fd0ece41e6421ae22c0ee73c88497a6e3a2/lib/pyodide/manager.ts
         pyodide.runPython(`import io, sys
 import pyodide
