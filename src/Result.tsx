@@ -1,7 +1,11 @@
 import React from "react"
 
-export const Result = () => {
+interface Props {
+    result: any
+}
+
+export const Result = ({result}: Props) => {
     return (
-        <div style={{ bottom: 0, height: 100}}>result</div>
+        <div style={{ bottom: 0, height: 100}}>{result}</div>
     )
 }
