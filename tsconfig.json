@@ -7,7 +7,7 @@
     "target": "esnext",
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@internal/*": ["src/*"]
     }
   }
 }
