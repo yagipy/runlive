@@ -23,21 +23,14 @@ type SearchGenerics = MakeGenerics<{
 export const Home = () => {
   // ref
   const doc = useRef(new Y.Doc())
-  const sharedString = useRef(doc.current.getText())
   // state
-  const [inputValue, setInputValue] = useState(sharedString.current.toString() ?? "export const a = 'test';")
   const [result, setResult] = useState("")
   const [language, setLanguage] = useState("python")
-  // const [ed, setEd] = useState<monaco.editor.IStandaloneCodeEditor|null>(null)
+  const [ed, setEd] = useState<monaco.editor.IStandaloneCodeEditor|null>(null)
   // custom hook
   const navigate = useNavigate()
   const search = useSearch<SearchGenerics>();
   const pyodide = usePyodide()
-
-  useEffect(() => {
-    const decoded = decode(search.shareToken ?? "")
-    setInputValue(decoded)
-  }, [])
 
   const handleRun = async () => {
     let stdout
@@ -48,7 +41,7 @@ export const Home = () => {
 import pyodide
 sys.stdout = io.StringIO()
 sys.stderr = io.StringIO()`)
-        pyodide.runPython(inputValue)
+        pyodide.runPython(ed?.getValue())
         stdout = pyodide.runPython("sys.stdout.getvalue()")
         break
       default:
@@ -59,38 +52,38 @@ sys.stderr = io.StringIO()`)
   }
 
   const handleShare = () => {
-    const encoded = encode(inputValue)
+    const encoded = encode(ed?.getValue() ?? "")
     navigate({ to: "./", replace: true , search: () => ({shareToken: encoded})})
   }
 
   const handleConnect = () => {
     const connectToken = uuidv4()
     navigate({ to: "./", replace: true , search: () => ({connectToken: connectToken})})
-    // const provider = new WebrtcProvider(connectToken, doc.current)
-    // new MonacoBinding(doc.current.getText(), ed?.getModel(), new Set([ed]), provider.awareness)
+    // WebRTCに接続時、データが消えてしまうため、一時的に変数に格納
+    const tmp = ed?.getValue()
+    const provider = new WebrtcProvider(connectToken, doc.current)
+    new MonacoBinding(doc.current.getText(), ed?.getModel(), new Set([ed]), provider.awareness)
+    ed?.setValue(tmp ?? "")
+
   }
 
   const handleMount = (editor: monaco.editor.IStandaloneCodeEditor, _: Monaco) => {
     if (search.connectToken) {
-      setInputValue(sharedString.current.toString())
       const provider = new WebrtcProvider(search.connectToken, doc.current)
       new MonacoBinding(doc.current.getText(), editor.getModel(), new Set([editor]), provider.awareness)
     }
-    // setEd(editor)
+    if (search.shareToken) {
+      const decoded = decode(search.shareToken)
+      editor.setValue(decoded)
+    }
+    setEd(editor)
   }
-
-  const handleChange = (value: string | undefined, _: any) => {
-    console.log("handleChange", value)
-    // ここがガーっとなる原因
-    setInputValue(value ?? "")
-  };
 
   return (
     <Box h="100vh">
       <Header handleRun={handleRun} language={language} handleChangeLanguage={(language) => setLanguage(language)} handleShare={handleShare} handleConnect={handleConnect}/>
       <Flex as="main">
         <Editor
-          onChange={handleChange}
           height="65vh"
           language={language}
           theme="vs-dark"
@@ -100,7 +93,6 @@ sys.stderr = io.StringIO()`)
               enabled: false
             }
           }}
-          value={inputValue}
           onMount={handleMount}
         />
       </Flex>
