@@ -45,7 +45,7 @@ sys.stderr = io.StringIO()`)
         stdout = pyodide.runPython("sys.stdout.getvalue()")
         break
       default:
-        stdout = `Sorry, ${language} execution id not supported yet.`
+        stdout = `Sorry, ${language} execution is not supported yet.`
         break
     }
     setResult(stdout)
