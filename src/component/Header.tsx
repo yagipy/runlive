@@ -5,9 +5,10 @@ interface Props {
     handleRun: () => void
     language: string
     handleChangeLanguage: (language: string) => void
+    handleShare: () => void
 }
 
-export const Header = ({handleRun, language, handleChangeLanguage}: Props) => {
+export const Header = ({handleRun, language, handleChangeLanguage, handleShare}: Props) => {
     return (
         <Flex as="header" w="100%" bg="#343434" h="10%" align="center" p={6} justify="space-between" color="white">
             <Heading color="white">runlive</Heading>
@@ -22,7 +23,7 @@ export const Header = ({handleRun, language, handleChangeLanguage}: Props) => {
                 </MenuList>
               </Menu>
                 <Text color="white" p={6} cursor="pointer" _hover={{ bg: "#262626"}} onClick={handleRun}>run</Text>
-                <Text color="white" p={6} cursor="pointer" _hover={{ bg: "#262626"}}>share</Text>
+                <Text onClick={() => handleShare()} color="white" p={6} cursor="pointer" _hover={{ bg: "#262626"}}>share</Text>
                 <Text color="white" p={6} cursor="pointer" _hover={{ bg: "#262626"}}>connect</Text>
                 <Text color="white" p={6} cursor="pointer" _hover={{ bg: "#262626"}}>deploy</Text>
             </Flex>

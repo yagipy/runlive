@@ -6,23 +6,35 @@ import {Box, Flex} from "@chakra-ui/react";
 import {Header} from "@internal/component/Header";
 import Editor from "@monaco-editor/react";
 import {Result} from "@internal/component/Result";
+import {encode, decode} from "@internal/lib/share"
+import {MakeGenerics, useNavigate, useSearch} from "@tanstack/react-location";
 
-const code = 'export const a = "test";'
+type SearchGenerics = MakeGenerics<{
+  Search: {
+    token?: string
+  }
+}>
+
 
 export const Home = () => {
-  const doc = useRef(new Y.Doc());
-  const sharedString = useRef(doc.current.getText());
-  const [inputValue, setInputValue] = useState(sharedString.current.toString() ?? "");
-  const [result, setResult] = useState("");
-  const [language, setLanguage] = useState("python");
+  const doc = useRef(new Y.Doc())
+  const sharedString = useRef(doc.current.getText())
+  const [inputValue, setInputValue] = useState(sharedString.current.toString() ?? "export const a = 'test';")
+  const [result, setResult] = useState("")
+  const [language, setLanguage] = useState("python")
+  const navigate = useNavigate()
+  const search = useSearch<SearchGenerics>();
   const pyodide = usePyodide()
 
   useEffect(() => {
     new WebrtcProvider("room", doc.current);
     sharedString.current.observeDeep(() => {
       setInputValue(sharedString.current.toString());
-    });
-  }, []);
+    })
+
+    const decoded = decode(search.token ?? "")
+    setInputValue(decoded)
+  }, [])
 
   const handleChange = (value: string | undefined, event: any) => {
     if (sharedString.current.toString()) {
@@ -47,15 +59,20 @@ sys.stderr = io.StringIO()`)
     setResult(stdout)
   }
 
+  const handleShare = () => {
+    const encoded = encode(inputValue)
+    navigate({ to: "./", replace: true , search: () => ({token: encoded})})
+  }
+
   return (
     <Box h="100vh">
-      <Header handleRun={handleRun} language={language} handleChangeLanguage={(language) => setLanguage(language)}/>
+      <Header handleRun={handleRun} language={language} handleChangeLanguage={(language) => setLanguage(language)} handleShare={handleShare}/>
       <Flex as="main">
         <Editor
           onChange={handleChange}
           height="65vh"
           language={language}
-          defaultValue={code}
+          defaultValue={inputValue}
           theme="vs-dark"
           options={{
             fontSize: 14,
